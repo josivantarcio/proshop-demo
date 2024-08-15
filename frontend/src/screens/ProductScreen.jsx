@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Row, Col, ListGroup, Card, Button, Image } from "react-bootstrap";
+import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating";
 import products from "../products";
 
@@ -33,7 +33,7 @@ const ProductScreen = () => {
               />
             </ListGroup.Item>
             <ListGroup.Item>
-              Preço: R$ {product.price.toFixed(2).replace(".", ",")}
+              Preço: R${product.price.toFixed(2).replace(".", ",")}
             </ListGroup.Item>
             <ListGroup.Item>
               <strong>Descrição:</strong> {product.description}
@@ -48,7 +48,7 @@ const ProductScreen = () => {
                   <Col>Preço:</Col>
                   <Col>
                     <strong>
-                      R$ {product.price.toFixed(2).replace(".", ",")}
+                      R${product.price.toFixed(2).replace(".", ",")}
                     </strong>
                   </Col>
                 </Row>
