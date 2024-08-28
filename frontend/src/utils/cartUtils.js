@@ -3,18 +3,19 @@ export const addDecimals = (num) => {
 };
 
 export const updateCart = (state) => {
-  //calculate items price
+  // Calculate items price
   state.itemsPrice = addDecimals(
     state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
 
-  //calculate shipping price (if order is over $100 then free, else $10 shipping)
+  // Calculate shipping price (if order is over $100 then free, else $10 shipping)
   state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10);
 
-  //calculate tax price (15% tax)
-  state.taxPrice = addDecimals(Number((0.15 + state.itemsPrice).toFixed(2)));
+  // Calculate tax price (15% tax)
+  // Convert state.itemsPrice to a number before adding 0.15
+  state.taxPrice = addDecimals(Number(state.itemsPrice) * 0.15);
 
-  //calculate total price
+  // Calculate total price
   state.totalPrice = (
     Number(state.itemsPrice) +
     Number(state.shippingPrice) +
