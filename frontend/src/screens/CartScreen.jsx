@@ -29,8 +29,8 @@ const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
-    navigate('/login?redirect=/shipping');
-  }
+    navigate("/login?redirect=/shipping");
+  };
 
   return (
     <Row>
@@ -102,7 +102,7 @@ const CartScreen = () => {
                 type="button"
                 className="btn-block"
                 disabled={cartItems.length === 0}
-                //onClick={}
+                onClick={checkoutHandler}
               >
                 Prosseguir para o Pagamento
               </Button>
