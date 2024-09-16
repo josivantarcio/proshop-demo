@@ -11,6 +11,10 @@ connectDB(); // Conectar ao MongoDB;
 
 const app = express();
 
+// Definir rotas e middlewares
+app.use(express.json());
+app.use(express.urlencoded({extended: true}))
+
 app.get("/", (req, res) => {
   res.send("API em execução...");
 });
