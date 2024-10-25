@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Row,
@@ -9,9 +10,15 @@ import {
   Card,
   ListGroupItem,
 } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { useGetOrderDetailsQuery } from "../slices/ordersApiSlice";
+import {
+  useGetOrderDetailsQuery,
+  usePaypalOrderMutation
+} from "../slices/ordersApiSlice";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -23,7 +30,30 @@ const OrderScreen = () => {
     error,
   } = useGetOrderDetailsQuery(orderId);
 
-  //console.log(order);
+  const [payOrder, { isLoading: loadingPay }] = usePaypalOrderMutation();
+
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (order && !order.isPaid) {
+      const loadPayPalScript = async () => {
+        paypalDispatch({
+          type: "resetOptions",
+          value: {
+            "client-id": order.clientId, // Certifique-se de que `order.clientId` está definido corretamente
+            currency: "BRL",
+          },
+        });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+      };
+      
+      if (!window.paypal) {
+        loadPayPalScript();
+      }
+    }
+  }, [order, paypalDispatch]);
 
   return isLoading ? (
     <Loader />
@@ -55,7 +85,7 @@ const OrderScreen = () => {
               )}
             </ListGroup.Item>
             <ListGroup.Item>
-              <h2>Metodo de Pagamento</h2>
+              <h2>Método de Pagamento</h2>
               <p>
                 <strong>Método: </strong> {order.paymentMethod}
               </p>
@@ -101,17 +131,17 @@ const OrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Itens</Col>
-                  <Col>RS{order.itemsPrice}</Col>
+                  <Col>R${order.itemsPrice}</Col>
                 </Row>
 
                 <Row>
                   <Col>Entrega</Col>
-                  <Col>RS{order.shippingPrice}</Col>
+                  <Col>R${order.shippingPrice}</Col>
                 </Row>
 
                 <Row>
                   <Col>Imposto</Col>
-                  <Col>RS{order.taxPrice}</Col>
+                  <Col>R${order.taxPrice}</Col>
                 </Row>
 
                 <Row>
@@ -119,8 +149,8 @@ const OrderScreen = () => {
                   <Col>R${order.totalPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
-              { /* PAY ORDER PLACEHOLDER */}
-              { /* MARK AS DELIVERED PLACEHOLDER */}
+              {/* PAY ORDER PLACEHOLDER */}
+              {/* MARK AS DELIVERED PLACEHOLDER */}
             </ListGroup>
           </Card>
         </Col>

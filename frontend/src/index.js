@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
-//import 'bootstrap/dist/css/bootstrap.min.css';
 import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
 import App from "./App";
@@ -33,7 +32,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
 
-      <Route path='' element={<PrivateRoute />}>
+      <Route element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/placeorder" element={<PlaceOrderScreen />} />
